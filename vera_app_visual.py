@@ -1,17 +1,20 @@
 import os
 import streamlit as st
-import google.generativeai as genai  # Agregamos la conexión a Google
-from dotenv import load_dotenv      # Agregamos el lector del archivo secreto
+import google.generativeai as genai
+from dotenv import load_dotenv
 
-# Cargamos la llave desde la "Sombra" (.env)
+# --- CONFIGURACIÓN DE INTELIGENCIA (MODO SOBERANO) ---
+# Cargamos la llave desde el búnker secreto (.env)
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
 
-# Configuramos Gemini de forma segura
 if api_key:
     genai.configure(api_key=api_key)
 else:
     st.error("⚠️ Error de Soberanía: No se encontró la API KEY en el búnker (.env)")
+    st.stop() # Detiene la ejecución si no hay llave para evitar errores feos
+
+model = genai.GenerativeModel('models/gemini-1.5-flash')
 
 # --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(page_title="VERA & AETERNA - Soberanía Total", page_icon="⚓", layout="wide")
